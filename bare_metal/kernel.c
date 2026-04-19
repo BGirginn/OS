@@ -148,7 +148,7 @@ void kernel_main(void)
 	terminal_initialize(); /* ekranı temizleme fonksiyonunu çağırdık */
 
 	/* Newline support is left as an exercise. */ /* alt satıra geçme özelliğini ekle diyordu eklendi putchardaki ilk if döngüsü kullanılarak */
-	terminal_writestring("tassaklarim 31. pipi eralp\n");
+	terminal_writestring("Hello World from my first os.\n");
 }
 
 /* burada artık OS başlıyor ilk burası çalışır kalanlar özellikler için tanımlamalar ve fonksiyonlardı. */
