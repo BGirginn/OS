@@ -1,2 +1,8 @@
 .DS_Store
 **/.DS_Store
+boot.o
+kernel.o 
+myos
+myos.iso
+.isodir
+otomatic.txt
