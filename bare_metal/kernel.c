@@ -59,8 +59,8 @@ size_t strlen(const char* str)
 /* bu normalde c kütüphanesinden gelen strlen fonksiyonunun elle yazılmış hali freestand yazdığımız için o tarz kütüphaneler yok biz de elle yazıyoruz muadilini */
 /* herhangi bir string in uzunluğunu bulmak için kullanacağımız fonksiyonun tanımlanması. fonk ismi strlen biz koyduk onu. size_t denen uint8_t gibi bir değişken tipi boyut için özel */
 
-#define VGA_WIDTH   100
-#define VGA_HEIGHT  30
+#define VGA_WIDTH   80
+#define VGA_HEIGHT  25
 #define VGA_MEMORY  0xB8000 
 
 /* sabit tanımlamaları. 80 25 di 100 30 yaptım ben not buraya  */
@@ -105,21 +105,46 @@ void terminal_putentryat(char c, uint8_t color, size_t x, size_t y)
 
 /* belirli bir koordinata karakter basar. dışarıdan karakter, renk, x ekseni konumu ve y ekseni konumu alır. */ 
 
+
+void terminal_scroll(void){
+	
+	for (size_t y = 1 ; y < VGA_HEIGHT ; y++) /* bu kısım tüm satırları gezmek için olan burada y nin 1 den başlama sebebi en üst satır değil altındaki kopyalanacak */
+	{
+		for (size_t x = 0; x < VGA_WIDTH; x++) /* burası da tüm sütunlar için burada işlem görmeyen sütun yok o yüzden 0 dan başlar*/
+		{
+			terminal_buffer[(y - 1) * VGA_WIDTH + x] /*üst satır aynı sütun*/ = terminal_buffer[y * VGA_WIDTH + x]; /* mevcut satır aynı sütun*/
+		}
+	}
+
+	for (size_t x = 0; x < VGA_WIDTH; x++) {
+		terminal_buffer[(VGA_HEIGHT - 1) * VGA_WIDTH + x] = vga_entry(' ', terminal_color); /* son satırı temizler */
+	}
+}
+
+
 void terminal_putchar(char c) 
 {
 	if (c == '\n') {
-		terminal_column = 0;
-		if (++terminal_row == VGA_HEIGHT)
-			terminal_row = 0;
-		return;
+	terminal_column = 0;
+	terminal_row++;
+
+	if (terminal_row == VGA_HEIGHT) {
+		terminal_scroll();
+		terminal_row = VGA_HEIGHT - 1;
 	}
+	return;
+}
 
 	terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
 
 	if (++terminal_column == VGA_WIDTH) {
 		terminal_column = 0;
-		if (++terminal_row == VGA_HEIGHT)
-			terminal_row = 0;
+		++terminal_row;
+
+		if (terminal_row == VGA_HEIGHT) {
+			terminal_scroll();
+			terminal_row = VGA_HEIGHT - 1;
+		}
 	}
 }
 /* tek char yazdırmak için kullanılır. eğer birden fazla char yazdırmak istersen bunu döngüye sokman gerekir o da zaten alttaki oluyor bu da alttakinin içi zaten */
