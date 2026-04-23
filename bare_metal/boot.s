@@ -26,6 +26,8 @@ _start:
 
 mov $stack_top , %esp   /* esp denen şey stack in en üst adresini ataman için tanımlanmış özel bir cpu registeri */
 
+call _init
+
 call kernel_main
 
 cli  /* kesmeleri kapatır (aka interrupt) */

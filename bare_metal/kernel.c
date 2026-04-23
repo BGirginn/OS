@@ -14,6 +14,8 @@
 
 /* Bu üstteki kısım bizim compile sistemimiz için. yanlışlıkla cross yerine farklı şey kullanırsak engellemesi için */
 
+int crt_test_degiskeni = 123;
+
 enum vga_color {
 	VGA_COLOR_BLACK = 0,
 	VGA_COLOR_BLUE = 1,
@@ -122,6 +124,8 @@ void terminal_scroll(void){
 }
 
 
+
+
 void terminal_putchar(char c) 
 {
 	if (c == '\n') {
@@ -174,6 +178,101 @@ void kernel_main(void)
 
 	/* Newline support is left as an exercise. */ /* alt satıra geçme özelliğini ekle diyordu eklendi putchardaki ilk if döngüsü kullanılarak */
 	terminal_writestring("Hello World from my first os.\n");
+	terminal_setcolor(vga_entry_color(VGA_COLOR_RED, VGA_COLOR_BLACK));
+	terminal_writestring("  1  \n");
+
+	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
+	terminal_writestring(" 2 \n");
+
+	terminal_setcolor(vga_entry_color(VGA_COLOR_BLUE, VGA_COLOR_BLACK));
+	terminal_writestring("3\n");	
+	
+	terminal_writestring("  4  \n");
+
+	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
+	terminal_writestring(" 5 \n");
+
+	terminal_setcolor(vga_entry_color(VGA_COLOR_BLUE, VGA_COLOR_BLACK));
+	terminal_writestring("6\n");
+		
+	terminal_setcolor(vga_entry_color(VGA_COLOR_RED, VGA_COLOR_BLACK));
+	terminal_writestring("  7  \n");
+
+	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
+	terminal_writestring(" 8 \n");
+
+	terminal_setcolor(vga_entry_color(VGA_COLOR_BLUE, VGA_COLOR_BLACK));
+	terminal_writestring("9\n");
+
+	terminal_setcolor(vga_entry_color(VGA_COLOR_RED, VGA_COLOR_BLACK));
+	terminal_writestring("10\n");
+
+	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
+	terminal_writestring("11 \n");
+
+		terminal_setcolor(vga_entry_color(VGA_COLOR_RED, VGA_COLOR_BLACK));
+	terminal_writestring("12 \n");
+
+	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
+	terminal_writestring("13 \n");
+	
+	terminal_setcolor(vga_entry_color(VGA_COLOR_RED, VGA_COLOR_BLACK));
+	terminal_writestring("14  \n");
+
+	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
+	terminal_writestring("15 \n");
+
+	terminal_setcolor(vga_entry_color(VGA_COLOR_RED, VGA_COLOR_BLACK));
+	terminal_writestring("16  \n");
+
+	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
+	terminal_writestring("17 \n");
+		
+	terminal_setcolor(vga_entry_color(VGA_COLOR_RED, VGA_COLOR_BLACK));
+	terminal_writestring("18 \n");
+
+	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
+	terminal_writestring("19 \n");
+
+	terminal_setcolor(vga_entry_color(VGA_COLOR_RED, VGA_COLOR_BLACK));
+	terminal_writestring("20  \n");
+
+	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
+	terminal_writestring("21 \n");
+
+	terminal_setcolor(vga_entry_color(VGA_COLOR_RED, VGA_COLOR_BLACK));
+	terminal_writestring("22 \n");
+
+	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
+	terminal_writestring("23 \n");
+
+	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
+	terminal_writestring("24 \n");
+
+	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
+	terminal_writestring("25 \n");
+
+	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
+	terminal_writestring("26 \n");
+
+	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
+	terminal_writestring("27 \n");
+
+	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
+	terminal_writestring("28 \n");
+
+	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
+	terminal_writestring("29 \n");
+
+	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
+	terminal_writestring("30 \n");
+
+	if (crt_test_degiskeni == 123) {
+    terminal_writestring("CRT Basarili! Global degisken hayatta.\n");
+	} 
+	else {
+    terminal_writestring("Hata: Global degisken baslatilamadi!\n");
+}
 }
 
 /* burada artık OS başlıyor ilk burası çalışır kalanlar özellikler için tanımlamalar ve fonksiyonlardı. */
