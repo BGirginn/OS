@@ -6,3 +6,5 @@ myos
 myos.iso
 .isodir
 otomatic.txt
+bare_metal/crt/crti.o
+bare_metal/crt/crtn.o
