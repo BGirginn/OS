@@ -18,6 +18,9 @@ gdt_flush:
     # 3. ADIM: Kodlarımızın bulunduğu segmenti (0x08) aktif etmek için "Uzak Zıplama" yap.
     # Bu satır işlemcinin içindeki CS kaydını 0x08 (1 * 8) yapar.
     ljmp $0x08, $.flush  # burada sistemi okunabilir ve yazılabilir alandan sadece okunabilir kural sistemine geçirip sonra da .flush kodunu sıraya alıyorsun
+    # Git 0x08 segmentine bak ve oradaki .flush etiketinin bulunduğu adrese zıpla." 
+    # Eğer $ koymasaydık, işlemci .flush etiketinin olduğu yerdeki kodu "adres" sanıp saçma bir yere zıplamaya çalışırdı. Yani $ burada "buraya git" emrinin koordinatını kesinleştirir
 
 .flush:
-    ret              # C koduna geri dön!
+    ret              # C koduna geri dön! 
+    

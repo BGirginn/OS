@@ -3,13 +3,6 @@ GDT Kaydı (Entry): Her bir hafıza diliminin (Kod, Veri vb.) tanımı.
 GDT İşaretçisi (Pointer): İşlemciye "GDT tablom tam olarak şurada" diyen özel bir yapı.
 Assembly Yükleyici: İşlemciye bu yeni tabloyu kullanmasını emreden küçük bir kod. */
 
-struct gdt_entry gdt[3];  /* buradaki üç 0 1 2 den gelen 3 adet anlamına geliyor. 3 adet gdt_entry oluşturuyor 3 farklı gdt var.
-gdt[0] = boş segment burası hep boş kalır.
-gtd[1] = kod kısmı burası sadece okunabilir. 
-gdt[2] = veri kısmı okunabilir yazılabilir. */
-
-/* Sen fonksiyonun içinde gdt[num].limit_low yazdığında, işlemci ye num kutusunun içine hangi sayı gelirse, git o numaralı kata ve oradaki limit_low çekmecesini aç komutu verir */
-
 /* base bizim ram bölgemizin başlangıcı limit ise ram bölgemizin ne kadar olacağıdır */
 struct gdt_entry {
     unsigned short limit_low;    // Limit'in yani ram boyutunun sayısal değerinin ilk 16 biti (normalde 20 bittir toplam)
@@ -22,8 +15,26 @@ struct gdt_entry {
 /*__attribute__((packed)) demezsen, derleyici (GCC) hızı artırmak için bu değişkenlerin arasına gizli boşluklar koyabilir.
 Ama işlemci bu veriyi tam olarak 8 bayt (boşluksuz) bekler. Bu yüzden "paketle" diyoruz.*/
 
+struct gdt_ptr {
+    unsigned short limit; // Tablonun toplam boyutu (Bayt cinsinden - 1). Bu yukardaki limitten farklı buradaki boyut tutuyor yukardaki ise ilk 16 biti.
+    unsigned int   base;  // Tablonun başladığı tam adres
+} __attribute__((packed));
+
+/* --- DEĞİŞKEN TANIMLAMALARI --- */
+
+struct gdt_entry gdt[3];  /* buradaki üç 0 1 2 den gelen 3 adet anlamına geliyor. 3 adet gdt_entry oluşturuyor 3 farklı gdt var.
+gdt[0] = boş segment burası hep boş kalır.
+gdt[1] = kod kısmı burası sadece okunabilir. 
+gdt[2] = veri kısmı okunabilir yazılabilir. */
+
+struct gdt_ptr gp; // Bu bizim işlemciye vereceğimiz "kartvizit" olacak. structtan eleman üretmek için bu gp yerine gp1 dersen gp1.limit, gp2.limit gibi birden fazla üretebilirsin.    
+
+/* --- FONKSİYONLAR --- */
+
 void gdt_set_gate(int num, unsigned long base, unsigned long limit, unsigned char access, unsigned char gran) 
 {
+    /* Sen fonksiyonun içinde gdt[num].limit_low yazdığında, işlemci ye num kutusunun içine hangi sayı gelirse, 
+       git o numaralı kata ve oradaki limit_low çekmecesini aç komutu verir */
     
     /* 1. Base (Adres) Parçalama: 32 bitlik adresi 3 çekmeceye bölüyoruz */
     gdt[num].base_low    = (base & 0xFFFF);        // İlk 16 bit (Maske ile kes-al)
@@ -41,12 +52,7 @@ void gdt_set_gate(int num, unsigned long base, unsigned long limit, unsigned cha
     gdt[num].access      = access;
 }
 
-struct gdt_ptr {
-    unsigned short limit; // Tablonun toplam boyutu (Bayt cinsinden - 1). Bu yukardaki limitten farklı buradaki boyut tutuyor yukardaki ise ilk 16 biti.
-    unsigned int   base;  // Tablonun başladığı tam adres
-} __attribute__((packed));
-
-struct gdt_ptr gp; // Bu bizim işlemciye vereceğimiz "kartvizit" olacak. structtan eleman üretmek için bu gp yerine gp1 dersen gp1.limit, gp2.limit gibi birden fazla üretebilirsin.    
+extern void gdt_flush();    // assembly de tanımladığımız session u buraya bu şekilde aktarabiliyoruz sanki c de tanımlı bir fonksiyon gibi evet
 
 void gdt_install() {
     /* 1. GDT İşaretçisini (gp) hazırlayalım */
@@ -70,4 +76,6 @@ void gdt_install() {
     // Buraya kadar her şey C dilindeydi. 
     // Ama işlemciye "Bu GDT'yi yükle" demek için 
     // Assembly dilinde 'lgdt' komutunu kullanmamız gerekecek.
+
+    gdt_flush();
 }

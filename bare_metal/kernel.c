@@ -171,9 +171,13 @@ void terminal_writestring(const char* data)
 /* terminal_write ve terminal_putchar ın ikisini birleştirip tam çalışan bir mekanizma yaratır. terminal_write da data uzunluğunu elle girmelisin burada otomatik olarak buluyor
 full bunu kullan */
 
-void kernel_main(void) 
+extern void gdt_install();  // c de tanımladığımız public fonksiyonu buraya tanımladık. 
+
+void kernel_main(void) // bu şekilde tanımlarsan public olur eğer static yazarsan private olur
 {
 
+	gdt_install();
+	
 	terminal_initialize(); /* ekranı temizleme fonksiyonunu çağırdık */
 
 	/* Newline support is left as an exercise. */ /* alt satıra geçme özelliğini ekle diyordu eklendi putchardaki ilk if döngüsü kullanılarak */
@@ -184,95 +188,14 @@ void kernel_main(void)
 	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
 	terminal_writestring(" 2 \n");
 
-	terminal_setcolor(vga_entry_color(VGA_COLOR_BLUE, VGA_COLOR_BLACK));
-	terminal_writestring("3\n");	
-	
-	terminal_writestring("  4  \n");
-
-	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
-	terminal_writestring(" 5 \n");
-
-	terminal_setcolor(vga_entry_color(VGA_COLOR_BLUE, VGA_COLOR_BLACK));
-	terminal_writestring("6\n");
-		
-	terminal_setcolor(vga_entry_color(VGA_COLOR_RED, VGA_COLOR_BLACK));
-	terminal_writestring("  7  \n");
-
-	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
-	terminal_writestring(" 8 \n");
-
-	terminal_setcolor(vga_entry_color(VGA_COLOR_BLUE, VGA_COLOR_BLACK));
-	terminal_writestring("9\n");
-
-	terminal_setcolor(vga_entry_color(VGA_COLOR_RED, VGA_COLOR_BLACK));
-	terminal_writestring("10\n");
-
-	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
-	terminal_writestring("11 \n");
-
-		terminal_setcolor(vga_entry_color(VGA_COLOR_RED, VGA_COLOR_BLACK));
-	terminal_writestring("12 \n");
-
-	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
-	terminal_writestring("13 \n");
-	
-	terminal_setcolor(vga_entry_color(VGA_COLOR_RED, VGA_COLOR_BLACK));
-	terminal_writestring("14  \n");
-
-	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
-	terminal_writestring("15 \n");
-
-	terminal_setcolor(vga_entry_color(VGA_COLOR_RED, VGA_COLOR_BLACK));
-	terminal_writestring("16  \n");
-
-	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
-	terminal_writestring("17 \n");
-		
-	terminal_setcolor(vga_entry_color(VGA_COLOR_RED, VGA_COLOR_BLACK));
-	terminal_writestring("18 \n");
-
-	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
-	terminal_writestring("19 \n");
-
-	terminal_setcolor(vga_entry_color(VGA_COLOR_RED, VGA_COLOR_BLACK));
-	terminal_writestring("20  \n");
-
-	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
-	terminal_writestring("21 \n");
-
-	terminal_setcolor(vga_entry_color(VGA_COLOR_RED, VGA_COLOR_BLACK));
-	terminal_writestring("22 \n");
-
-	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
-	terminal_writestring("23 \n");
-
-	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
-	terminal_writestring("24 \n");
-
-	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
-	terminal_writestring("25 \n");
-
-	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
-	terminal_writestring("26 \n");
-
-	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
-	terminal_writestring("27 \n");
-
-	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
-	terminal_writestring("28 \n");
-
-	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
-	terminal_writestring("29 \n");
-
-	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
-	terminal_writestring("30 \n");
-
 	if (crt_test_degiskeni == 123) {
     terminal_writestring("CRT Basarili! Global degisken hayatta.\n");
 	} 
 	else {
     terminal_writestring("Hata: Global degisken baslatilamadi!\n");
-}
+	}
+
+	while(1);  // kernelin kapanmaması için
 }
 
 /* burada artık OS başlıyor ilk burası çalışır kalanlar özellikler için tanımlamalar ve fonksiyonlardı. */
