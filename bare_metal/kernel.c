@@ -183,7 +183,7 @@ void kernel_main(void) // bu şekilde tanımlarsan public olur eğer static yaza
 	/* Newline support is left as an exercise. */ /* alt satıra geçme özelliğini ekle diyordu eklendi putchardaki ilk if döngüsü kullanılarak */
 	terminal_writestring("Hello World from my first os.\n");
 	terminal_setcolor(vga_entry_color(VGA_COLOR_RED, VGA_COLOR_BLACK));
-	terminal_writestring("  1  \n");
+	terminal_writestring(" 1  \n");
 
 	terminal_setcolor(vga_entry_color(VGA_COLOR_GREEN, VGA_COLOR_BLACK));
 	terminal_writestring(" 2 \n");
