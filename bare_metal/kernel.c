@@ -172,11 +172,13 @@ void terminal_writestring(const char* data)
 full bunu kullan */
 
 extern void gdt_install();  // c de tanımladığımız public fonksiyonu buraya tanımladık. 
+extern void idt_install();
 
 void kernel_main(void) // bu şekilde tanımlarsan public olur eğer static yazarsan private olur
 {
 
 	gdt_install();
+	idt_install();
 	
 	terminal_initialize(); /* ekranı temizleme fonksiyonunu çağırdık */
 
