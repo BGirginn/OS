@@ -1,5 +1,14 @@
+#include <idt.h>
+
 /* IDT Giriş Yapısı: İşlemcinin "Telefon Çaldığında Nereye Bakayım?" dediği 8 baytlık kutu. */
 /* mesela normalde sistem klavye çalışınca ne yapayım i bilmez biz ona öğretiyoruz bunları bu kısım sayesinde */
+
+void isr_handler(struct regs *r) {
+    // Fonksiyonun gerçek kodları burada yazılır...
+    if(r->int_no == 0) { ... }
+}
+
+
 struct idt_entry {
     unsigned short base_lo;    // ISR fonksiyonun adresinin ilk yarısı (16 bit)
     unsigned short sel;        // Hangi kod segmentini kullanacağız? (Bizim GDT'deki 0x08)
