@@ -1,0 +1,14 @@
+# asm-lsp için x86_64 GNU (GAS) yapılandırması
+[assembler]
+# Kullandığın syntax türü. GAS/AT&T kullandığın için "gas" yapıyoruz.
+# (Eğer Intel tarzı yazsaydın "nasm" veya "masm" olacaktı)
+dialect = "gas"
+
+[target]
+# Hedef mimari ve işletim sistemi ayarı
+arch = "x86_64"
+os = "linux" # Kernel yazdığın için standart olarak linux/elf hedeflenir
+
+[instruction_set]
+# Editörün sana x86_64 komut setini (instruction set) önermesi için
+backend = "x86"
