@@ -1,10 +1,8 @@
 .DS_Store
 **/.DS_Store
-boot.o
-kernel.o 
+.asm-lsp.toml
+*.o
 myos
 myos.iso
-.isodir
+isodir/
 otomatic.txt
-bare_metal/crt/crti.o
-bare_metal/crt/crtn.o
