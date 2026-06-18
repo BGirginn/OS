@@ -5,6 +5,7 @@ cd /Users/brgirgin/Desktop/OS/bare_metal
 
 # 2. Temizlik (Eskiler gitsin)
 rm -f *.o crt/*.o myos myos.iso
+rm -rf isodir
 
 # 3. Assembly Dosyalarını Derle
 i686-elf-as crt/crti.s -o crt/crti.o
