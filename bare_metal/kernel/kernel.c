@@ -9,7 +9,7 @@
 #endif
 
 #if !defined(__i386__)
-#error "This tutorial needs to be compiled with a ix86-elf compiler"  
+#error "This tutorial needs to be compiled with a ix86-elf compiler"
 #endif
 
 /* Bu üstteki kısım bizim compile sistemimiz için. yanlışlıkla cross yerine farklı şey kullanırsak engellemesi için */
@@ -35,7 +35,7 @@ enum vga_color {
 	VGA_COLOR_WHITE = 15,
 }; /* ekrana gelecek olan renklerin sayı karşılığını tanımlıyoruz bunlar sabit */
 
-static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg) 
+static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg)
 {
 	return fg | bg << 4;
 }
@@ -43,15 +43,15 @@ static inline uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg)
 /* static bir nevi private. inline dediği fonksiyon eğer çok büyük değilse çağırmak yerine direkt yapıştır (optimizasyon) uint8_t unsigned int 8 bit demek.
 içerdeki return de ise dönecek veri 8 bit üst 4 bg, alt 4 fg. bg değerinin adresini üst 4 e atıyoruz fg alt 4 or kullanarak birleştiriyoruz. renk ataması daha sonra burası tanımlama*/
 
-static inline uint16_t vga_entry(unsigned char uc, uint8_t color) 
+static inline uint16_t vga_entry(unsigned char uc, uint8_t color)
 {
 	return (uint16_t) uc | (uint16_t) color << 8;
 }
 
-/* uint16_t unsigned 16 bitlik sayı demek. unsigned char dediği harfin ascii a göre sayısal karşılığı. color dediği düz color. üst 8 renk, alt 8 harf. 
+/* uint16_t unsigned 16 bitlik sayı demek. unsigned char dediği harfin ascii a göre sayısal karşılığı. color dediği düz color. üst 8 renk, alt 8 harf.
 henüz renk ve harf ataması yapılmadı sadece kullanılacak denklemler tanımlanıyor. ekrana gelecek harf ve harfin rengininin denklemini tanımlıyoruz. */
 
-size_t strlen(const char* str) 
+size_t strlen(const char* str)
 {
 	size_t len = 0;
 	while (str[len])
@@ -63,7 +63,7 @@ size_t strlen(const char* str)
 
 #define VGA_WIDTH   80
 #define VGA_HEIGHT  25
-#define VGA_MEMORY  0xB8000 
+#define VGA_MEMORY  0xB8000
 
 /* sabit tanımlamaları. 80 25 di 100 30 yaptım ben not buraya  */
 
@@ -72,12 +72,12 @@ size_t terminal_column;
 uint8_t terminal_color;
 uint16_t* terminal_buffer = (uint16_t*)VGA_MEMORY;  /* 0xB8000 adresinden itibaren olan RAM’i ekran gibi kullanacağım yazı yazma işleri tarzında tanımlaması */
 
-void terminal_initialize(void) 
+void terminal_initialize(void)
 {
 	terminal_row = 0;
 	terminal_column = 0;
 	terminal_color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
-	
+
 	for (size_t y = 0; y < VGA_HEIGHT; y++) { /* sütunlar */
 		for (size_t x = 0; x < VGA_WIDTH; x++) { /* satırlar */
 			const size_t index = y * VGA_WIDTH + x; /* iki boyutu tek boyuta çevirme kısmı */
@@ -90,7 +90,7 @@ void terminal_initialize(void)
 normalde yükseklik ve genişlik 2 boyuttur ama biz işlem yapmak için index değişkeni ile ikiden tek boyuta geçiyoruz. sonrasında da her bir kareye boşluk ve o boşluğa da renk atıyoruz
 bu sayede ekran seçtiğimiz renkte ve boşmuş gibi gözüküyor*/
 
-void terminal_setcolor(uint8_t color) 
+void terminal_setcolor(uint8_t color)
 {
 	terminal_color = color;
 }
@@ -99,17 +99,17 @@ void terminal_setcolor(uint8_t color)
 /* terminal_setcolor(vga_entry_color(VGA_COLOR_RED, VGA_COLOR_BLACK)); yazarsan bu satırdan sonraki her şey kırmızı yazı siyah arka plan olur mesela ilki fg ikincisi bg */
 /* bu fonksiyonu çağırırken zaten parametreye değeri veriyoruz o da bu değeri direkt fg ve bg olarak tüm terminal_color lara atıyor */
 
-void terminal_putentryat(char c, uint8_t color, size_t x, size_t y) 
+void terminal_putentryat(char c, uint8_t color, size_t x, size_t y)
 {
 	const size_t index = y * VGA_WIDTH + x;
 	terminal_buffer[index] = vga_entry(c, color);
 }
 
-/* belirli bir koordinata karakter basar. dışarıdan karakter, renk, x ekseni konumu ve y ekseni konumu alır. */ 
+/* belirli bir koordinata karakter basar. dışarıdan karakter, renk, x ekseni konumu ve y ekseni konumu alır. */
 
 
 void terminal_scroll(void){
-	
+
 	for (size_t y = 1 ; y < VGA_HEIGHT ; y++) /* bu kısım tüm satırları gezmek için olan burada y nin 1 den başlama sebebi en üst satır değil altındaki kopyalanacak */
 	{
 		for (size_t x = 0; x < VGA_WIDTH; x++) /* burası da tüm sütunlar için burada işlem görmeyen sütun yok o yüzden 0 dan başlar*/
@@ -126,7 +126,7 @@ void terminal_scroll(void){
 
 
 
-void terminal_putchar(char c) 
+void terminal_putchar(char c)
 {
 	if (c == '\n') {
 	terminal_column = 0;
@@ -155,7 +155,7 @@ void terminal_putchar(char c)
 /* burasının asıl olayı string yazdırmak ve alt satıra geçme destepinin ana mekanizması olması kalan özellikler bunun üstüne gelecek */
 
 
-void terminal_write(const char* data, size_t size) 
+void terminal_write(const char* data, size_t size)
 {
 	for (size_t i = 0; i < size; i++)
 		terminal_putchar(data[i]);
@@ -163,7 +163,7 @@ void terminal_write(const char* data, size_t size)
 /* birden fazla karakteri yazmak için kullanılır terminal_putchar ın döngüsel olarak çalıştığı versiyon */
 /* terminal_write("ABC", 3); */
 
-void terminal_writestring(const char* data) 
+void terminal_writestring(const char* data)
 {
 	terminal_write(data, strlen(data));
 }
@@ -171,7 +171,7 @@ void terminal_writestring(const char* data)
 /* terminal_write ve terminal_putchar ın ikisini birleştirip tam çalışan bir mekanizma yaratır. terminal_write da data uzunluğunu elle girmelisin burada otomatik olarak buluyor
 full bunu kullan */
 
-extern void gdt_install();  // c de tanımladığımız public fonksiyonu buraya tanımladık. 
+extern void gdt_install();  // c de tanımladığımız public fonksiyonu buraya tanımladık.
 extern void idt_install();
 
 void kernel_main(void) // bu şekilde tanımlarsan public olur eğer static yazarsan private olur
@@ -179,7 +179,7 @@ void kernel_main(void) // bu şekilde tanımlarsan public olur eğer static yaza
 
 	gdt_install();
 	idt_install();
-	
+
 	terminal_initialize(); /* ekranı temizleme fonksiyonunu çağırdık */
 
 	/* Newline support is left as an exercise. */ /* alt satıra geçme özelliğini ekle diyordu eklendi putchardaki ilk if döngüsü kullanılarak */
@@ -192,7 +192,7 @@ void kernel_main(void) // bu şekilde tanımlarsan public olur eğer static yaza
 
 	if (crt_test_degiskeni == 123) {
     terminal_writestring("CRT Basarili! Global degisken hayatta.\n");
-	} 
+	}
 	else {
     terminal_writestring("Hata: Global degisken baslatilamadi!\n");
 	}

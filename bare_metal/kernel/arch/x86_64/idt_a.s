@@ -1,8 +1,7 @@
-; IDTR dediğimiz şey idt için olan özel bir register
-[GLOBAL idt_load]  ; idt_load ın harici dosyalar tarafından erişilebilir olmasını sağlar
-extern idtp           ; C'deki 'idtp' değişkenini buradan görebilelim. idt.c dosyasındaki idt_ptr olarak tanımlanan şey
+# idtr dediğimiz şey idt için olan özel bir register'dır.
+
+.global idt_load  # idt_load'un dış dosyalar (C kodları) tarafından çağrılabilmesini sağlar.
 
 idt_load:
-    lidt [idtp]       ; Köşeli parantez varsa idtp'nin kendisini değil, tuttuğu adresin gösterdiği yerdeki bilgiyi getirir. 
-    /* lidt komutu ise bu idt yani hataların bulunduğu tablo defter her ne ise onu onun başladığı adresi ve boyutunu idtr adlı özel register a yükler
-    ret               ; C'ye geri dön
+    lidt (idtp)   # idt.c içindeki idtp yapısının işaret ettiği adresi IDTR register'ına yükler.
+    ret           # Fonksiyonu bitirip C koduna geri döner.
