@@ -17,6 +17,7 @@ idt.o: $(KERNEL_DIR)/idt.c
 	$(CC) -c $(KERNEL_DIR)/idt.c -o idt.o $(CFLAGS)
 
 boot.o: $(ARCH_DIR)/boot.s
+
 	$(AS) $(ARCH_DIR)/boot.s -o boot.o
 
 gdt_flush.o: $(ARCH_DIR)/gdt_flush.s
@@ -40,6 +41,6 @@ iso: myos
 run: iso
 	qemu-system-i386 -cdrom myos.iso
 
-clean:
+clear:
 	rm -f *.o myos myos.iso
 	rm -rf isodir
