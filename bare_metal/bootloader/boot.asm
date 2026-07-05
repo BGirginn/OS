@@ -1,3 +1,18 @@
+/*
+BOOTLOADER DA BULUNMASI GEREKENLER
+
+RAM'deki Konum (Origin): BIOS, diskin ilk sektöründeki (MBR) 512 baytı okur ve RAM'de istisnasız her zaman 0x7C00 adresine yükler. 
+Bootloader kodunun en başında derleyiciye "Ben 0x7C00 adresinde çalışacağım, tüm hesaplarını buna göre yap" demen gerekir.
+Temizlik ve Güvenlik (Segment & Stack Setup): BIOS işlemciyi sana devrettiğinde içerisi darmadağındır. Hangi hafıza segmentinin nerede olduğu belli değildir. 
+Bootloader ilk iş olarak bu ortamı temizlemeli (segmentleri sıfırlamalı) ve fonksiyonların çalışabilmesi için geçici bir Yığın (Stack) alanı kurmalıdır.
+Kargo İşlemi (Disk I/O): 512 baytlık alan bir işletim sistemi için asla yetmez. Bootloader'ın asıl görevi, 
+diskin geri kalan sektörlerinde yatan Kernel (çekirdek) kodlarını okuyup RAM'in daha geniş ve güvenli bir bölgesine (örneğin 0x8000) kopyalamaktır.
+Sihirli İmza (Magic Number): BIOS'un bir diski "boot edilebilir" olarak görmesi için 512 baytlık sektörün son iki baytının mutlak suretle 0xAA55 olması gerekir. 
+Bu yoksa, BIOS "Bootable device not found" hatası verir.
+*/
+
+
+
 [org 0x7c00]         ; Donanımsal Zorunluluk: BIOS bizi RAM'de bu adrese yükler. Biz de o yüzden yazma işleminin bu adresten başlamasını sağlıyoruz
                     ; Kod içindeki tüm etiketlerin (labels) adresi buna göre hesaplanır.
 
@@ -13,6 +28,7 @@ start:
     ; BIOS bizi başlattığında CS (Code Segment) dahil segment register'larında çöp değerler olabilir.
     ; CS register'ını temizlemenin tek yolu bir "Far Jump" (Uzak Atlama) yapmaktır.
     jmp 0x0000:init_segments  ; code segment registerini 0 yap temizle sonra da init_segments e atla
+    ; jmp kullanıldığında sistem otomatik cs de işlem yapar mov ile cs de işlem yapamazsın kalan segmentlerde işlem yapabilirsin
 
 init_segments:
     xor ax, ax       ; AX register'ını sıfırla (AX = 0)
