@@ -105,6 +105,12 @@ disk_error:
     call print_string
     jmp hang
 
+enable_a20:
+    in al, 0x92          ; 0x92 numaralı sistem portunun içindeki mevcut durumu AL register'ına oku
+    or al, 2             ; AL içindeki değerin 2. bitini (A20 bitini) 1 yap (aktif et)
+    out 0x92, al         ; Güncellenmiş AL değerini porta geri yaz. A20 hattı artık açıldı!
+    ; direkt or 0x92, 00000010b yapamazsın bu bir port register değil portta bunu yapamıyoruz registerda yapabiliyoruz kesin durum bu o yüzden 3 adımda yaptılır portlar için
+
 ; --- DATA (VERİ) ALANI ---
 ; db = Define Byte. 13 = Satır Başı (CR), 10 = Alt Satır (LF), 0 = Metin Sonu (Null)
 BOOT_DRIVE db 0     ; Sürücü numarasını geçici olarak hafızada kilitleyeceğimiz 1 baytlık hücre
